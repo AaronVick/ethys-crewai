@@ -1,0 +1,28 @@
+# ETHYS CrewAI Integration
+
+CrewAI integration for ETHYS x402 protocol - wallet-signed identity, trust scoring, discovery, and telemetry for autonomous agents.
+
+## Quick Links
+
+- Full Documentation: README.md
+- Complete LLM Index: llms.txt
+- Agent Manifest: .well-known/agents.json
+- Protocol Docs: https://402.ethys.dev/
+
+## Install & Run
+
+```bash
+pip install -e .
+export ETHYS402_PRIVATE_KEY=0x...
+python examples/basic_usage.py
+```
+
+## What This Provides
+
+- 6 CrewAI tools for ETHYS x402 protocol
+- Wallet-signed authentication (EOA/ERC-6551)
+- Agent onboarding, telemetry, trust, and discovery
+- Reference agent templates
+
+See llms.txt for complete details.
+

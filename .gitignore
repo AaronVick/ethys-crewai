@@ -1,0 +1,41 @@
+# Documentation (excluded from git)
+docs/
+
+# Environment and secrets
+.env
+.env.local
+*.pem
+*.key
+
+# Python
+*.pyc
+__pycache__/
+*.egg-info/
+.venv/
+venv/
+
+# Testing
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+*.cover
+.hypothesis/
+
+# IDE
+.DS_Store
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Build artifacts
+dist/
+build/
+*.whl
+*.tar.gz
+
+# Logs
+*.log
+logs/

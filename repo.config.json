@@ -1,0 +1,28 @@
+{
+  "repo_name": "ethys-crewai",
+  "repo_type": "crewai",
+  "default_branch": "main",
+  "reviewers": [],
+  "labels": ["release", "automation", "docs", "tests"],
+  "commands": {
+    "install": "pip install -e . && pip install -r requirements-dev.txt",
+    "lint": "ruff check ethys402_crewai/ tests/ examples/",
+    "format_check": "black --check ethys402_crewai/ tests/ examples/",
+    "typecheck": "mypy ethys402_crewai/",
+    "test": "pytest -m 'not live'",
+    "test_live_optional": "pytest -m live"
+  },
+  "required_files": [
+    "README.md",
+    "llms.txt",
+    ".well-known/agents.json",
+    "docs/12-28-review.md"
+  ],
+  "optional_files": [
+    "LICENSE",
+    "SECURITY.md",
+    "CONTRIBUTING.md",
+    "CODE_OF_CONDUCT.md"
+  ]
+}
+

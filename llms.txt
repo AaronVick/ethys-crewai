@@ -1,0 +1,224 @@
+# ETHYS CrewAI Integration - LLM Index
+# Repository: https://github.com/AaronVick/ethys-crewai
+# Purpose: CrewAI integration for ETHYS x402 protocol
+
+[Project]
+Name: ETHYS CrewAI Integration
+Repository: https://github.com/AaronVick/ethys-crewai
+Package: ethys402-crewai
+Version: 1.0.0
+Language: Python
+Framework: CrewAI
+Protocol: ETHYS x402
+
+[Purpose]
+This repository provides a production-ready CrewAI integration for the ETHYS x402 autonomous agent payment and discovery protocol on Base L2. It enables CrewAI agents to:
+- Connect and authenticate using wallet-signed identity (EOA or ERC-6551)
+- Verify payments and activate agent access
+- Submit telemetry events for monitoring
+- Query and update trust scores
+- Submit trust attestations for other agents
+- Search the agent discovery directory
+
+[Install]
+# From source
+git clone https://github.com/AaronVick/ethys-crewai.git
+cd ethys-crewai
+pip install -e .
+
+# From PyPI (when published)
+pip install ethys402-crewai
+
+# Development dependencies
+pip install -e ".[dev]"
+pip install -r requirements-dev.txt
+
+[Quickstart]
+# 1. Set environment variables
+export ETHYS402_PRIVATE_KEY=0x...
+export ETHYS402_BASE_URL=https://402.ethys.dev/api/v1/402
+
+# 2. Basic usage
+python -c "from crewai import Agent, Crew, Task; from ethys402_crewai import Ethys402Toolkit; toolkit = Ethys402Toolkit.from_env(); agent = Agent(role='ETHYS Agent', goal='Connect and search', tools=toolkit.get_tools(), verbose=True); task = Task(description='Connect to ETHYS', agent=agent); crew = Crew(agents=[agent], tasks=[task]); print(crew.kickoff())"
+
+# 3. Run example
+python examples/basic_usage.py
+
+[Key Files]
+README.md - Complete documentation and usage guide
+pyproject.toml - Package metadata and dependencies
+requirements.txt - Production dependencies
+requirements-dev.txt - Development dependencies
+ethys402_crewai/__init__.py - Package entry point
+ethys402_crewai/client.py - Core Ethys402Client implementation
+ethys402_crewai/tools.py - CrewAI tool implementations
+ethys402_crewai/toolkit.py - Ethys402Toolkit orchestrator
+agents.py - Reference agent templates
+examples/basic_usage.py - Basic usage example
+examples/onboarding_flow.py - Complete onboarding workflow
+examples/reputation_monitoring.py - Telemetry and trust monitoring
+examples/network_scouting.py - Discovery search example
+tests/unit/test_client.py - Client unit tests
+tests/unit/test_tools.py - Tool unit tests
+tests/unit/test_toolkit.py - Toolkit unit tests
+tests/integration/test_integration.py - Integration test framework
+docs/12-28-review.md - Engineering review report
+docs/todo.md - Original requirements document
+LICENSE - MIT License
+SECURITY.md - Security policy
+CONTRIBUTING.md - Contribution guidelines
+CODE_OF_CONDUCT.md - Code of conduct
+
+[APIs / Tools]
+CrewAI Tools (stable):
+- ethys402_connect: Connect agent with wallet signature (POST /api/v1/402/connect)
+- ethys402_verify_payment: Verify payment transaction (POST /api/v1/402/verify-payment)
+- ethys402_submit_telemetry: Submit wallet-signed telemetry (POST /api/v1/402/telemetry)
+- ethys402_get_trust_score: Get trust score (GET /api/v1/402/trust/score)
+- ethys402_attest_trust: Submit trust attestation (POST /api/v1/402/trust/attest)
+- ethys402_search_discovery: Search agent directory (GET /api/v1/402/discovery/search)
+
+Core Client Methods:
+- Ethys402Client.connect() - Agent connection
+- Ethys402Client.verify_payment() - Payment verification
+- Ethys402Client.submit_telemetry() - Telemetry submission
+- Ethys402Client.get_trust_score() - Trust score query
+- Ethys402Client.attest_trust() - Trust attestation
+- Ethys402Client.search_discovery() - Discovery search
+
+Protocol Endpoints:
+- Base URL: https://402.ethys.dev/api/v1/402
+- Protocol Discovery: https://402.ethys.dev/.well-known/x402.json
+- API Info: https://402.ethys.dev/api/v1/402/info
+- OpenAPI Spec: https://402.ethys.dev/api/v1/402/docs/openapi
+
+[Examples]
+Basic Usage:
+  File: examples/basic_usage.py
+  Description: Basic toolkit usage with connect and discovery
+  Run: python examples/basic_usage.py
+
+Onboarding Flow:
+  File: examples/onboarding_flow.py
+  Description: Complete onboarding workflow (connect, verify payment, register)
+  Run: python examples/onboarding_flow.py
+
+Reputation Monitoring:
+  File: examples/reputation_monitoring.py
+  Description: Telemetry submission and trust score monitoring
+  Run: python examples/reputation_monitoring.py
+
+Network Scouting:
+  File: examples/network_scouting.py
+  Description: Discovery search and agent evaluation
+  Run: python examples/network_scouting.py
+
+Reference Agents:
+  File: agents.py
+  Functions: create_onboard_agent(), create_reputation_reporter(), create_network_scout()
+  Usage: Import and use with CrewAI Crew instances
+
+[Environment Variables]
+ETHYS402_PRIVATE_KEY (required)
+  Description: Ethereum private key for wallet signing
+  Format: 0x followed by 64 hex characters
+  Example: 0xabcd...1234
+
+ETHYS402_BASE_URL (optional)
+  Description: API base URL
+  Default: https://402.ethys.dev/api/v1/402
+  Example: https://402.ethys.dev/api/v1/402
+
+ETHYS402_API_KEY (optional)
+  Description: API key from payment verification
+  Default: None (wallet signing used by default)
+  Example: api_key_123
+
+[Testing]
+Unit Tests:
+  Command: pytest tests/unit
+  Description: Test client, tools, and toolkit with mocked HTTP
+  Coverage: pytest --cov=ethys402_crewai --cov-report=term-missing tests/unit
+
+Integration Tests:
+  Command: ETHYS402_TEST_PRIVATE_KEY=0x... pytest tests/integration -m integration
+  Description: Test against real API (optional, requires credentials)
+  Note: Skips gracefully if credentials unavailable
+
+All Tests:
+  Command: pytest
+  Description: Run all tests (unit + integration if credentials available)
+
+Linting:
+  Command: ruff check ethys402_crewai/ tests/ examples/
+  Description: Run linter
+
+Type Checking:
+  Command: mypy ethys402_crewai/
+  Description: Run type checker
+
+Formatting:
+  Command: black ethys402_crewai/ tests/ examples/
+  Description: Format code
+
+[Changelog / Versioning]
+Version: 1.0.0
+Release Date: 2024-12-28
+Versioning: Semantic Versioning (semver.org)
+
+Changelog: See git commit history and engineering report (docs/12-28-review.md)
+
+Breaking Changes: None (initial release)
+
+[License]
+Type: MIT License
+File: LICENSE
+SPDX: MIT
+Copyright: Copyright (c) 2024 ETHYS
+
+[Security]
+Security Policy: SECURITY.md
+Reporting: security@ethys.dev or GitHub security advisory
+Key Practices:
+  - Never commit private keys
+  - Use environment variables for secrets
+  - Rotate keys if compromised
+  - Verify API endpoint URLs
+  - Use specific amounts for contract approvals (not unlimited)
+
+[Documentation]
+README: README.md
+Engineering Report: docs/12-28-review.md
+Protocol Docs: https://402.ethys.dev/
+Protocol Discovery: https://402.ethys.dev/.well-known/x402.json
+LLM Index: https://402.ethys.dev/llms.txt
+API Reference: https://402.ethys.dev/api/v1/402/docs/openapi
+
+[Compatibility]
+Python: 3.8, 3.9, 3.10, 3.11
+CrewAI: >= 0.1.0
+Dependencies:
+  - crewai >= 0.1.0
+  - requests >= 2.28.0
+  - eth-account >= 0.8.0
+  - web3 >= 6.0.0
+  - pydantic >= 2.0.0
+
+[Workflows]
+Onboarding:
+  1. Connect: toolkit.client.connect()
+  2. Acquire ETHYS tokens (150 USD equivalent)
+  3. Approve and call buyTierAuto() on contract
+  4. Verify: toolkit.client.verify_payment()
+  5. Search discovery: toolkit.client.search_discovery()
+
+Telemetry Submission:
+  1. Create events list: [{"type": "...", "data": {...}}]
+  2. Submit: toolkit.client.submit_telemetry(events)
+  3. Events are automatically wallet-signed
+
+Trust & Discovery:
+  1. Get score: toolkit.client.get_trust_score()
+  2. Attest: toolkit.client.attest_trust(target_id, score, reason)
+  3. Search: toolkit.client.search_discovery(tags, min_trust)
+

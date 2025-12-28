@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  # Mock ETHYS x402 API server for integration tests
+  # Note: This is a placeholder. In production, you would either:
+  # 1. Use the actual production API (https://402.ethys.dev)
+  # 2. Set up a local mock server that implements the x402 protocol
+  # 3. Use a staging environment
+  
+  # For now, tests should be run against the production API
+  # or with mocked responses using pytest fixtures
+  
+  # Example mock server (would need actual implementation):
+  # mock-api:
+  #   image: python:3.11
+  #   ports:
+  #     - "3000:3000"
+  #   volumes:
+  #     - ./tests/mock_server:/app
+  #   command: python /app/server.py
+

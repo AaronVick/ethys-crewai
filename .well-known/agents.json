@@ -1,0 +1,157 @@
+{
+  "name": "ethys-crewai",
+  "description": "CrewAI integration for ETHYS x402 protocol - enables CrewAI agents to connect, authenticate, submit telemetry, and interact with the ETHYS trust and discovery network",
+  "version": "1.0.0",
+  "repo_url": "https://github.com/AaronVick/ethys-crewai",
+  "package_name": "ethys402-crewai",
+  "languages": ["python"],
+  "frameworks": ["crewai"],
+  "primary_use_cases": [
+    "Agent onboarding to ETHYS x402 protocol",
+    "Wallet-signed telemetry submission",
+    "Trust score querying and attestations",
+    "Agent discovery and network exploration"
+  ],
+  "type": "integration",
+  "docs_paths": [
+    "README.md",
+    "docs/12-28-review.md",
+    "llms.txt"
+  ],
+  "code_paths": [
+    "ethys402_crewai/client.py",
+    "ethys402_crewai/tools.py",
+    "ethys402_crewai/toolkit.py",
+    "agents.py"
+  ],
+  "examples_paths": [
+    "examples/basic_usage.py",
+    "examples/onboarding_flow.py",
+    "examples/reputation_monitoring.py",
+    "examples/network_scouting.py"
+  ],
+  "test_command": "pytest tests/unit",
+  "lint_command": "ruff check ethys402_crewai/ tests/ examples/",
+  "typecheck_command": "mypy ethys402_crewai/",
+  "install_command": "pip install -e .",
+  "capabilities": {
+    "wallet_signing": true,
+    "eoa_identity": true,
+    "erc6551_identity": {
+      "basic_structure": true,
+      "full_implementation": false
+    },
+    "telemetry_submission": true,
+    "trust_scoring": true,
+    "trust_attestations": true,
+    "discovery_search": true,
+    "payment_verification": true
+  },
+  "entrypoints": {
+    "python_imports": [
+      "from ethys402_crewai import Ethys402Client",
+      "from ethys402_crewai import Ethys402Toolkit",
+      "from agents import create_onboard_agent, create_reputation_reporter, create_network_scout"
+    ],
+    "example_scripts": [
+      "python examples/basic_usage.py",
+      "python examples/onboarding_flow.py",
+      "python examples/reputation_monitoring.py",
+      "python examples/network_scouting.py"
+    ]
+  },
+  "tools": [
+    {
+      "name": "ethys402_connect",
+      "description": "Connect agent to ETHYS x402 protocol with wallet signature",
+      "endpoint": "POST /api/v1/402/connect",
+      "input_schema": {
+        "agent_name": "Optional[str]",
+        "token_contract": "Optional[str]",
+        "token_id": "Optional[str]"
+      }
+    },
+    {
+      "name": "ethys402_verify_payment",
+      "description": "Verify payment transaction and activate agent access",
+      "endpoint": "POST /api/v1/402/verify-payment",
+      "input_schema": {
+        "agent_id": "str",
+        "tx_hash": "str"
+      }
+    },
+    {
+      "name": "ethys402_submit_telemetry",
+      "description": "Submit wallet-signed telemetry events for agent monitoring",
+      "endpoint": "POST /api/v1/402/telemetry",
+      "input_schema": {
+        "events": "List[Dict[str, Any]]"
+      }
+    },
+    {
+      "name": "ethys402_get_trust_score",
+      "description": "Get current trust score and components (reliability, coherence)",
+      "endpoint": "GET /api/v1/402/trust/score",
+      "input_schema": {}
+    },
+    {
+      "name": "ethys402_attest_trust",
+      "description": "Submit trust attestation for another agent",
+      "endpoint": "POST /api/v1/402/trust/attest",
+      "input_schema": {
+        "target_agent_id": "str",
+        "score": "int (1-100)",
+        "reason": "str"
+      }
+    },
+    {
+      "name": "ethys402_search_discovery",
+      "description": "Search agent directory by tags and minimum trust score",
+      "endpoint": "GET /api/v1/402/discovery/search",
+      "input_schema": {
+        "tags": "Optional[List[str]]",
+        "min_trust": "Optional[int]"
+      }
+    }
+  ],
+  "environment_variables": {
+    "ETHYS402_PRIVATE_KEY": {
+      "required": true,
+      "description": "Ethereum private key for wallet signing",
+      "format": "0x followed by 64 hex characters"
+    },
+    "ETHYS402_BASE_URL": {
+      "required": false,
+      "description": "API base URL",
+      "default": "https://402.ethys.dev/api/v1/402"
+    },
+    "ETHYS402_API_KEY": {
+      "required": false,
+      "description": "API key from payment verification (optional, wallet signing used by default)"
+    }
+  },
+  "protocol_references": {
+    "discovery": "https://402.ethys.dev/.well-known/x402.json",
+    "llm_index": "https://402.ethys.dev/llms.txt",
+    "api_info": "https://402.ethys.dev/api/v1/402/info",
+    "documentation": "https://402.ethys.dev/",
+    "openapi": "https://402.ethys.dev/api/v1/402/docs/openapi"
+  },
+  "requirements": {
+    "python": ">=3.8",
+    "crewai": ">=0.1.0",
+    "dependencies": [
+      "requests>=2.28.0",
+      "eth-account>=0.8.0",
+      "web3>=6.0.0",
+      "pydantic>=2.0.0"
+    ]
+  },
+  "testing": {
+    "unit_tests": "pytest tests/unit",
+    "integration_tests": "ETHYS402_TEST_PRIVATE_KEY=0x... pytest tests/integration -m integration",
+    "coverage": "pytest --cov=ethys402_crewai --cov-report=term-missing",
+    "note": "Unit tests use mocked HTTP, integration tests optional"
+  }
+}
+
